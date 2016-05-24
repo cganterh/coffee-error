@@ -1,4 +1,4 @@
-coffee_error
+coffee-error
 ============
 
 An extendable coffeescript error class.
