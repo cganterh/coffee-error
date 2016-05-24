@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<link rel="shortcut icon" type="image/png"
+      href="../bower_components/jasmine-core/images/jasmine_favicon.png">
+<link rel="stylesheet" type="text/css"
+      href="../bower_components/jasmine-core/lib/jasmine-core/jasmine.css">
+
+<script src="../bower_components/jasmine-core/lib/jasmine-core/jasmine.js">
+</script>
+<script src="../bower_components/jasmine-core/lib/jasmine-core/jasmine-html.js">
+</script>
+<script src="../bower_components/jasmine-core/lib/jasmine-core/boot.js">
+</script>
+<script src="../bower_components/coffee-script/extras/coffee-script.js">
+</script>
+<script src="../lib/error.js"></script>
+
+<script type="text/coffeescript">
+  describe 'The ExtendableError class', ->
+    it 'is a subclass of Error', ->
+      expect(ExtendableError.prototype instanceof Error).toBe true
+
+    it 'can be thrown', ->
+      message = 'this is an error'
+      thrower = =>
+        throw new ExtendableError message
+
+      expect(thrower).toThrowError ExtendableError, message
+
+
+  describe 'An instance of ExtendableError', ->
+    beforeAll ->
+      @message = 'This is an error!'
+      @ext_err_instance = new ExtendableError @message
+
+    it 'is an instance of Error', ->
+      expect(@ext_err_instance instanceof Error).toBe true
+
+    it 'is an instance of ExtendableError', ->
+      expect(@ext_err_instance instanceof ExtendableError).toBe true
+
+    it 'has the name attribute: ExtendableError', ->
+      expect(@ext_err_instance.name).toBe 'ExtendableError'
+
+    it 'has a non enumerable name attribute', ->
+      expect(@ext_err_instance.propertyIsEnumerable('name')).toBe false
+
+    it 'has a stack attribute of type string', ->
+      expect(typeof @ext_err_instance.stack).toBe 'string'
+
+    it 'has a toString method and its return value maches /ExtendableError/', ->
+      expect(@ext_err_instance.toString()).toMatch /ExtendableError/
+
+    it 'has a message attribute', ->
+      expect(@ext_err_instance.message).toBe @message
+
+
+  describe 'A subclass of ExtendableError', ->
+    beforeAll ->
+      class @SubExtendableError extends ExtendableError
+
+    it 'is a subclass of Error', ->
+      expect(@SubExtendableError.prototype instanceof Error).toBe true
+
+    it 'is a subclass of ExtendableError', ->
+      expect(@SubExtendableError.prototype instanceof ExtendableError).toBe true
+
+    it 'can be thrown', ->
+      message = 'this is an error'
+      thrower = =>
+        throw new @SubExtendableError message
+
+      expect(thrower).toThrowError @SubExtendableError, message
+
+    it 'can define its own constructor', ->
+      define_class = ->
+        class SubExtendableError2 extends ExtendableError
+          constructor: (message='', @param) ->
+            super "This is a predefined
+              message#{if message then ': ' else ''}#{message}"
+        new SubExtendableError2('hola!', 3)
+
+      expect(define_class).not.toThrow()
+
+
+  describe 'An instance of a subclass of ExtendableError', ->
+    beforeAll ->
+      @message = 'This is en error!'
+      class @SubExtendableError extends ExtendableError
+      @sub_ext_err_instance = new @SubExtendableError @message
+
+    it 'is an instance of Error', ->
+      expect(@sub_ext_err_instance instanceof Error).toBe true
+
+    it 'is an instance of ExtendableError', ->
+      expect(@sub_ext_err_instance instanceof ExtendableError).toBe true
+
+    it 'is an instance of the subclass of ExtendableError', ->
+      expect(@sub_ext_err_instance instanceof @SubExtendableError).toBe true
+
+    it 'has (in this case) the name attribute: SubExtendableError', ->
+      expect(@sub_ext_err_instance.name).toBe 'SubExtendableError'
+
+    it 'has a non enumerable name attribute', ->
+      expect(@sub_ext_err_instance.propertyIsEnumerable('name')).toBe false
+
+    it 'has a stack attribute of type string', ->
+      expect(typeof @sub_ext_err_instance.stack).toBe 'string'
+
+    it(
+      'has a toString method and its return value maches /SubExtendableError/',
+      ->
+        expect(@sub_ext_err_instance.toString()).toMatch /SubExtendableError/
+    )
+
+    it 'has a message attribute', ->
+      expect(@sub_ext_err_instance.message).toBe @message
+
+
+  describe 'A subsubclass of ExtendableError', ->
+    beforeAll ->
+      class @SubExtendableError extends ExtendableError
+      class @SubSubExtendableError extends @SubExtendableError
+
+    it 'is a subclass of Error', ->
+      expect(@SubSubExtendableError.prototype instanceof Error).toBe true
+
+    it 'is a subclass of ExtendableError', ->
+      expect(@SubSubExtendableError.prototype instanceof ExtendableError).toBe(
+        true
+      )
+
+    it 'is a subclass of the subclass of ExtendableError', ->
+      expect(
+        @SubSubExtendableError.prototype instanceof @SubExtendableError
+      ).toBe(
+        true
+      )
+
+    it 'can be thrown', ->
+      message = 'this is an error'
+      thrower = =>
+        throw new @SubSubExtendableError message
+
+      expect(thrower).toThrowError @SubSubExtendableError, message
+
+
+  describe 'An instance of a subsubclass of ExtendableError', ->
+    beforeAll ->
+      @message = 'This is en error!'
+      class @SubExtendableError extends ExtendableError
+      class @SubSubExtendableError extends @SubExtendableError
+      @sub_sub_ext_err_instance = new @SubSubExtendableError @message
+
+    it 'is an instance of Error', ->
+      expect(@sub_sub_ext_err_instance instanceof Error).toBe true
+
+    it 'is an instance of ExtendableError', ->
+      expect(@sub_sub_ext_err_instance instanceof ExtendableError).toBe true
+
+    it 'is an instance of the subclass of ExtendableError', ->
+      expect(@sub_sub_ext_err_instance instanceof @SubExtendableError).toBe true
+
+    it 'is an instance of the subsubclass of ExtendableError', ->
+      expect(@sub_sub_ext_err_instance instanceof @SubSubExtendableError).toBe(
+        true
+      )
+
+    it 'has (in this case) the name attribute: SubSubExtendableError', ->
+      expect(@sub_sub_ext_err_instance.name).toBe 'SubSubExtendableError'
+
+    it 'has a non enumerable name attribute', ->
+      expect(@sub_sub_ext_err_instance.propertyIsEnumerable('name')).toBe false
+
+    it 'has a stack attribute of type string', ->
+      expect(typeof @sub_sub_ext_err_instance.stack).toBe 'string'
+
+    it(
+      'has a toString method and its return value maches
+      /SubSubExtendableError/',
+      ->
+        expect(@sub_sub_ext_err_instance.toString()).toMatch(
+          /SubSubExtendableError/
+        )
+    )
+
+    it 'has a message attribute', ->
+      expect(@sub_sub_ext_err_instance.message).toBe @message
+</script>
