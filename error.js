@@ -6,10 +6,11 @@
   this.ExtendableError = (function(superClass) {
     extend(ExtendableError, superClass);
 
-    function ExtendableError(message) {
+    function ExtendableError(message, from) {
       if (message == null) {
         message = '';
       }
+      this.from = from != null ? from : null;
       ExtendableError.__super__.constructor.call(this, message);
       Object.defineProperty(this, 'message', {
         configurable: true,

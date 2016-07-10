@@ -4,7 +4,7 @@
     "Cristobal Ganter <cganterh@gmail.com>"
   ],
   "description": "An extendable coffeescript error class.",
-  "main": "lib/error.js",
+  "main": "error.js",
   "moduleType": [
     "globals"
   ],
@@ -21,7 +21,8 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests"
+    "tests",
+    "test.html"
   ],
   "devDependencies": {
     "jasmine-core": "^2.4.1",

@@ -1,5 +1,5 @@
 class @ExtendableError extends Error
-  constructor: (message = '') ->
+  constructor: (message='', @from=null) ->
     super message
 
     Object.defineProperty @, 'message',
