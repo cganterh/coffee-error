@@ -36,6 +36,14 @@
         expect(thrower).toThrowError ExtendableError, message
     )
 
+    it(
+      'its direct cause can be accessed using the "from" attribute',
+      ->
+        the_cause_of_all_evil = new Error 'the cause of all evil'
+        e = new ExtendableError 'effect', the_cause_of_all_evil
+        expect(e.from).toBe the_cause_of_all_evil
+    )
+
 
   describe 'An instance of ExtendableError', ->
     beforeAll ->
