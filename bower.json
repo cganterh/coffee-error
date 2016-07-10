@@ -22,7 +22,8 @@
     "bower_components",
     "test",
     "tests",
-    "test.html"
+    "test.html",
+    "makefile"
   ],
   "devDependencies": {
     "jasmine-core": "^2.4.1",
